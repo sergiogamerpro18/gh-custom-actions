@@ -3,7 +3,13 @@ import * as github from "@actions/github";
 import * as exec from "@actions/exec";
 
 function run(){
- core.notice('Hello from custom js action')
+	// Get input values
+	const bucket = core.getInput('bucket', { required:true });
+	const bucketRegion = core.getInput('bucket-region', { required:true });
+	const distFolder = core.getInput('dist-folder', { required:true });
+
+	// Upload files
+	exec.exec(`aws s3 sync ${distFolder} s3://${bucket} --region ${bucketRegion}`);
 }
 
 run();
